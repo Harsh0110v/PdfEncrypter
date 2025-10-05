@@ -4,7 +4,8 @@ from PyPDF2 import PdfReader, PdfWriter
 import os, io, secrets
 from werkzeug.exceptions import RequestEntityTooLarge
 
-app = Flask(__name__)
+
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), "templates"))
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -37,4 +38,5 @@ def upload():
     return send_file(output_stream,as_attachment=True,download_name=secrets.token_hex(4)+".pdf"
                          ,mimetype="application/pdf")
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
